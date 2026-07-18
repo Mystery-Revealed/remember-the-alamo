@@ -5,6 +5,10 @@ TEKS **7.3A, 7.3B, 7.3C, 7.1B** (causes, people, battles of the whole
 Revolution, and 1836). Built to follow **Hold the Line: The Alamo** as the
 unit's review game.
 
+**Live:** [remember-the-alamo.onrender.com](https://remember-the-alamo.onrender.com)
+(students) · [remember-the-alamo.onrender.com/#teacher](https://remember-the-alamo.onrender.com/#teacher)
+(Teacher Command Center) · [source on GitHub](https://github.com/Mystery-Revealed/remember-the-alamo)
+
 A solo knowledge-march quiz: every question you answer right moves **Sam
 Houston's army** one step down the road from **Gonzales to San Jacinto**. The
 frame is respectful — the quiz *powers a march*, it is not a re-fight of the
@@ -76,12 +80,15 @@ terminals (Vite proxies `/socket.io` to the server on :4701).
 
 ## Deploy (Render) & embed (Wix)
 
-1. Push to GitHub. On **Render**, create a **Web Service** from the repo
-   (`buildCommand: npm install && npm run build`, `startCommand: node server/src/index.js`,
-   free plan). Live at e.g. `https://remember-the-alamo.onrender.com`.
-2. In **Wix**: embed the Render **student URL** on a public page; embed the
-   **`#teacher`** URL on a **password-protected** page (the in-app PIN is a second
-   layer). Use the `https://` URL; push to GitHub to redeploy.
+Deployed as a Render **Blueprint** (`remember-the-alamo`, free plan) synced
+from [github.com/Mystery-Revealed/remember-the-alamo](https://github.com/Mystery-Revealed/remember-the-alamo)
+`master` — Render reads `render.yaml` automatically on every push and
+redeploys. Live at **https://remember-the-alamo.onrender.com**.
+
+In **Wix**: embed the student URL above on a public page; embed the
+**`#teacher`** URL on a **password-protected** page (the in-app PIN is a
+second layer). Push to GitHub to redeploy; hard-refresh clears the Wix
+iframe cache.
 
 ## Art
 
