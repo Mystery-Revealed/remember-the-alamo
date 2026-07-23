@@ -118,7 +118,15 @@ export function createQuizGame({
     sides: [side],
     totalActions: serve,
     chapterCount: CHAPTER_COUNT,
-    meta,
+    meta: {
+      ...meta,
+      // Leg labels + the questions-per-leg rule, so the client can derive "which
+      // leg does this feedback belong to" from the resolution's own stepIndex
+      // (race-proof) instead of eventCard/turn, which the server pushes ahead to
+      // the NEXT leg in the same batch as a leg-ending resolution (see MatchView).
+      stepsPerChapter: 2, // mirrors chapterOf's fixed 2-questions-per-leg rule
+      chapters: legs.map((l) => ({ title: l.title, date: l.date })),
+    },
 
     // Only ever solo here; one human side, no AI rival.
     initMatch() {

@@ -14,7 +14,26 @@ export default function MatchView({ state, dispatch }) {
   const meta = begin.meta;
   const march = match.map?.march || { correct: 0, serve: meta?.serve || 12 };
 
-  const leg = eventCard?.chapter || turn?.chapter;
+  // The server pushes the NEXT leg's chapter:event AND its first turn:begin
+  // synchronously with the CURRENT leg's LAST turn:resolution — it doesn't wait
+  // for the student to dismiss anything. So while a leg-ending verdict is on
+  // screen, eventCard AND turn have BOTH already raced ahead, and preferring
+  // either would make the chip read one leg ahead. Only feedback.stepIndex is
+  // baked into the feedback payload itself and can't race — derive the leg from
+  // it (same questions-per-leg rule the server's chapterOf uses). Once feedback
+  // is dismissed, eventCard/turn are exactly what's on screen next, so THEIR
+  // chapter is what should show.
+  const chapters = meta.chapters || [];
+  const stepsPerChapter = meta.stepsPerChapter || 2;
+  const legIndexFor = (stepIndex) =>
+    Math.min(Math.floor(stepIndex / stepsPerChapter), chapters.length - 1);
+  const liveLegIndex = feedback ? legIndexFor(feedback.stepIndex)
+    : turn?.yourTurn ? legIndexFor(turn.stepIndex)
+    : eventCard ? eventCard.chapter.index
+    : null;
+  const leg = liveLegIndex != null && chapters[liveLegIndex]
+    ? { index: liveLegIndex, count: chapters.length, ...chapters[liveLegIndex] }
+    : (eventCard?.chapter || turn?.chapter); // fallback if meta.chapters is ever absent
   const lowMeter = Object.entries(match.meters || {}).find(([, v]) => v <= 15);
 
   return (
